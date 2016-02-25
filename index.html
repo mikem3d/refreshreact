@@ -41,18 +41,66 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3>The HTML Presentation Framework</h3>
+					<h1>ReactJS</h1>
+					<img src="images/react-logo.png" style="width:10%;">
+					<h3>Refresh Miami workshop</h3>
 					<p>
-						<small>Created by <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small>
+						<small>Created by Michael Martinez / <a href="http://twitter.com/mikem3d">@mikem3d</a></small>
 					</p>
 				</section>
 
 				<section>
-					<h2>Hello There</h2>
-					<p>
-						reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-					</p>
+					<section>
+						<h2>What is ReactJS</h2>
+						<p>
+							A JAVASCRIPT LIBRARY FOR BUILDING USER INTERFACES
+						</p>
+					</section>
+					<section>
+						<h2>Component based</h2>
+						<p>
+							By separating our UI into components, we can reduce code complexity, increase reusability, and separate concerns between components.
+						</p>
+					</section>
+					<section>
+						<img src="images/components.png">
+					</section>
+					<section>
+						<h2>Virtual DOM</h2>
+						<p>
+							React abstracts away the DOM from you, giving a simpler programming model and better performance. React can also render on the server using Node, and it can power native apps using React Native.
+						</p>
+						<aside class="notes">
+							Talk about how React creates an abstraction of the DOM, how costly it is to traverse the DOM, bind click events, etc. React does a "dirty" check of changes in the virtual DOM and only updates those elements which have changed.
+						</aside>
+					</section>
+					<section>
+						<h2>Data Flow</h2>
+						<p>
+							React implements one-way reactive data flow which reduces boilerplate and is easier to reason about than traditional data binding.
+						</p>
+						<aside class="notes">
+							There are two types of "model" data in React: props and state. It's important to understand the distinction between the two. Identify that state should drive the dynamic content in a component and has to live in the class
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>What about jQuery?</h2>
+						<p>most important take away</p>
+						<blockquote cite="http://reactfordesigners.com/labs/reactjs-introduction-for-people-who-know-just-enough-jquery-to-get-by/">
+							In jQuery, you write event handlers which modify the DOM.<br>
+							In React.js, you write event handlers which modify the state. And you write render() to reflect the current state.
+						</blockquote>
+					</section>
+					<section>
+						<img src="images/jquery-style-vs-react-style.png">
+						<img src="images/jquery-style-vs-react-style2.png">
+					</section>
+					<aside class="notes">
+						Talk about performance, ease of use, reusability, reduce code complexity and bugs
+					</aside>
 				</section>
 
 				<!-- Example of nested vertical slides -->

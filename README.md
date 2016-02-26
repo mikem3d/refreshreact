@@ -5,7 +5,7 @@ Join us for an introduction to ReactJS, the new framework on the block from the 
 ###REACTJS workshop
 
 ####PART I (10-15mins)(very optimistic estimate on time)
--Intro 
+- Intro 
   -Info about refreshmiami and the purpose of the workshop
 **Info about myself
 *What is ReactJS

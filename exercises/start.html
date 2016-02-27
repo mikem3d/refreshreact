@@ -8,6 +8,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <style>
+    	.completed {
+    		color: grey;
+    		text-decoration: line-through;
+    	}
+    </style>
   </head>
   <body>
 
@@ -15,6 +22,114 @@
 
     <script type="text/babel">
 
+    	var SearchBar = React.createClass({
+
+    		getInitialState: function(){
+    			return {
+    				inputValue: ''
+    			}
+    		},
+
+    		handleChange: function(e){
+    			this.setState({
+    				inputValue: e.target.value
+    			});
+    		},
+
+    		handleKeyPress: function(e){
+    			if(e.key === "Enter")
+    			{
+    				this.props.onKeyPress(this.state.inputValue);
+    				this.setState({
+    					inputValue: ''
+    				})
+    			}
+    		},
+
+    		render: function(){
+    			return (
+    				<input type="text" 
+    					onChange={this.handleChange}
+    					onKeyPress={this.handleKeyPress} 
+    					value={this.state.inputValue} />
+    			);
+    		}
+    	});
+
+    	var TodoItem = React.createClass({
+    		getInitialState: function(){
+    			return {
+    				completed: false
+    			}
+    		},
+    		handleChange: function(e){
+    			this.setState({
+    				completed: !this.state.completed
+    			});
+    		},
+    		handleRemove: function(e){
+    			this.props.onRemove(this.props.index);
+    		},
+    		render: function(){
+    			return (
+    				<div className="todo-item">
+    					<label className={this.state.completed === true ? 'completed' : ''}>
+    						<input type="checkbox" onChange={this.handleChange}/>
+    						{this.props.value}
+    					</label>
+    					<button className="btn btn-sm btn-default" onClick={this.handleRemove}>x</button>
+    				</div>
+    			);
+    		}
+    	});
+
+    	var App = React.createClass({
+
+    		getInitialState: function(){
+    			return {
+    				items: []
+    			};
+    		},
+
+    		classList: "app-wrapper text-center",
+
+    		handleKeyPress: function(value){
+    			this.state.items.push(value);
+
+    			this.setState({
+    				items: this.state.items,
+    			});
+    		},
+
+    		handleRemove: function(index){
+    			this.state.items.splice(index,1);
+    			this.setState({
+    				items: this.state.items
+    			});
+    		},
+
+    		render: function(){
+    			var _this = this;
+    			var renderedItems = this.state.items.map( function(item,index){
+    				return (
+    					<TodoItem key={index} index={index} value={item} onRemove={_this.handleRemove}></TodoItem>
+    				);
+    			});
+    			return (
+    				<div className={this.classList}>
+    					<h1 className="text-center">ToDo</h1>
+    					<SearchBar onKeyPress={this.handleKeyPress}></SearchBar>
+    					{renderedItems}
+    				</div>
+				);
+    		}
+    	});
+
+
+    	ReactDOM.render(
+    		<App/>,
+    		document.getElementById('example')
+    	);
     </script>
     
   </body>

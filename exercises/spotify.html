@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Refresh Miami ReactJS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <style>
+    	.app-wrapper {
+    		float: none;
+    		margin: 0 auto;
+    	}
+    	.album {
+    		transition: all 0.4s ease-out;
+    		margin: 10px 0;
+    		cursor: pointer;
+    	}
+    	.album img {
+    		width: auto;
+    		height: 116px;
+    	}
+    	.playing {
+    		opacity: 0.2;
+    	}
+
+    </style>
+  </head>
+  <body>
+
+    <div id="example"></div>
+
+    <script type="text/babel">
+
+    	var App = React.createClass({
+
+    		audioObject: null,
+
+    		getInitialState: function(){
+				return {
+					searchQuery: '',
+					albums: [],
+					currentAlbumPlaying: null
+				}
+			},
+
+			handleChange: function(e){
+				this.setState({
+					searchQuery: e.target.value
+				});
+			},
+
+			handleKeyPress: function(e){
+				if(e.key === "Enter")
+				{
+					this.fetchAlbums(this.state.searchQuery);
+				}
+			},
+
+			fetchAlbums: function(query){
+				var _this = this;
+				$.ajax('https://api.spotify.com/v1/search?q=' + query + '&type=album').done(function(response){
+					_this.setState({
+						albums: response.albums.items
+					});
+				});
+			},
+
+			handlePlay: function(id){
+				if(id === this.state.currentAlbumPlaying)
+				{
+					if(this.audioObject !== null)
+					{
+						this.audioObject.pause();
+						this.audioObject = null;
+						this.setState({
+					    	currentAlbumPlaying: null
+					    });
+					}
+				} else {
+					var _this = this;
+					$.ajax('https://api.spotify.com/v1/albums/' + id).done(function(response){
+						var random = Math.floor(Math.random() * (response.tracks.items.length-1));
+
+						if(_this.audioObject !== null)
+						{
+							_this.audioObject.pause();
+							_this.audioObject = null;
+						}
+
+						_this.audioObject = new Audio(response.tracks.items[random].preview_url);
+						_this.audioObject.play();
+						
+						_this.setState({
+							currentAlbumPlaying: id
+						});
+
+						_this.audioObject.addEventListener('ended', function () {
+						    _this.audioObject = null;
+						    _this.setState({
+						    	currentAlbumPlaying: null
+						    });
+						});
+
+						_this.audioObject.addEventListener('pause', function () {
+							/*
+						    _this.audioObject = null;
+						    _this.setState({
+						    	currentAlbumPlaying: null
+						    });
+							*/
+						});
+					});
+				}
+			},
+
+    		render: function(){
+    			var _this = this;
+    			var renderedAlbums = this.state.albums.map( function(item,index){
+    				return (
+    					<div className={'col-sm-4 album ' + (_this.state.currentAlbumPlaying === item.id ? 'playing' : '')} key={index} onClick={_this.handlePlay.bind(_this,item.id)}>
+    						<img src={item.images[0].url}/>
+    					</div>
+    				);
+    			});
+
+    			return (
+    				<div className="app-wrapper col-sm-7 text-center">
+    					<h1>Spotify album search</h1>
+    					<p>This is our React workshop sample app. Just type an album name to display it</p>
+    					<input type="text" onChange={this.handleChange} value={this.state.searchQuery} onKeyPress={this.handleKeyPress}/>
+    					<div clasName="clearfix">
+    						{renderedAlbums}
+    					</div>
+    				</div>
+				);
+    		}
+    	});
+
+
+    	ReactDOM.render(
+    		<App/>,
+    		document.getElementById('example')
+    	);
+    </script>
+    
+  </body>
+</html>
